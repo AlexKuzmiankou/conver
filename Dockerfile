@@ -1,4 +1,8 @@
 FROM openjdk:8-jdk-alpine
+FROM ubuntu
+
+ENV TZ=America/Los_Angeles
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # указываем точку монтирования для внешних данных внутри контейнера (как мы помним, это Линукс)
 VOLUME /tmp
@@ -6,11 +10,25 @@ VOLUME /tmp
 # внешний порт, по которому наше приложение будет доступно извне
 EXPOSE 8080
 
-# указываем, где в нашем приложении лежит джарник
-ARG JAR_FILE=target/convertator-0.0.1.jar
+#Install git
+RUN apt-get update        
+RUN apt-get install -y git
 
-# добавляем джарник в образ под именем rebounder-chain-backend.jar
-ADD ${JAR_FILE} convertator-0.0.1.jar
+RUN cd /tmp/
 
-# команда запуска джарника
-ENTRYPOINT ["java","-jar","/convertator-0.0.1.jar"]
+#Clone
+RUN git clone https://github.com/AlexKuzmiankou/conver.git
+
+RUN find /conver/ -type d -exec chmod 777 {} \;
+
+RUN cd conver
+
+#Install Maven
+RUN apt-get install -y maven
+
+#Set working directory
+WORKDIR /conver/
+
+#Собираем билд через Maven
+RUN mvn clean install
+

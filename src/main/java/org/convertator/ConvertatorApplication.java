@@ -6,20 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ConvertatorApplication {
-@Deprecated("ddd")
+//@Deprecated("ddd")
     public static void main(String[] args) {
     	int i=0;
     	
-    	
-    	{
-    		
-    		
-    		{
-    			System.err.println("data " + array2);
-    			System.err.println("data " + array1);
-    			int j=0;
-    		}
-    	}
     	
         SpringApplication.run(ConvertatorApplication.class, args);
         MainView view = new MainView();
